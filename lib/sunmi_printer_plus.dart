@@ -363,6 +363,27 @@ class SunmiPrinter {
     await _channel.invokeMethod("CUT_PAPER");
   }
 
+  ///*openDrawer*
+  ///
+  ///This method will open drawer
+  static Future<void> openDrawer() async {
+    await _channel.invokeMethod("OPEN_DRAWER");
+  }
+
+  ///*drawerStatus*
+  ///
+  ///This method will  check the status of the drawer true/false (connect disconnect)
+  static Future<bool> drawerStatus() async {
+    return await _channel.invokeMethod("DRAWER_STATUS") ?? false;
+  }
+
+  ///*drawerTimesOpen*
+  ///
+  ///This method will  check how many times the drawer was open
+  static Future<int> drawerTimesOpen() async {
+    return await _channel.invokeMethod("DRAWER_OPENED") ?? 0;
+  }
+
   ///*exitTransactionPrint*
   ///
   ///This method will close the transaction
