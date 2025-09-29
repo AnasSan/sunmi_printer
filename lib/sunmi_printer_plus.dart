@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
 import 'column_maker.dart';
@@ -158,10 +157,11 @@ class SunmiPrinter {
   ///
   ///This method will print a row based in a list of [ColumnMaker].
   static Future<void> printRow({required List<ColumnMaker> cols}) async {
-    final _jsonCols = List<Map<String, String>>.from(
-        cols.map<Map<String, String>>((ColumnMaker col) => col.toJson()));
+    final jsonCols = List<Map<String, String>>.from(
+      cols.map<Map<String, String>>((ColumnMaker col) => col.toJson()),
+    );
     Map<String, dynamic> arguments = <String, dynamic>{
-      "cols": json.encode(_jsonCols)
+      "cols": json.encode(jsonCols),
     };
     await _channel.invokeMethod("PRINT_ROW", arguments);
   }
@@ -178,29 +178,31 @@ class SunmiPrinter {
   ///*printQRCode*
   ///
   ///With this method you can print a qrcode with some errorLevel and size.
-  static Future<void> printQRCode(String data,
-      {int size = 5,
-      SunmiQrcodeLevel errorLevel = SunmiQrcodeLevel.LEVEL_H}) async {
-    int _errorlevel = 3;
+  static Future<void> printQRCode(
+    String data, {
+    int size = 5,
+    SunmiQrcodeLevel errorLevel = SunmiQrcodeLevel.LEVEL_H,
+  }) async {
+    int errorlevel = 3;
     switch (errorLevel) {
       case SunmiQrcodeLevel.LEVEL_L:
-        _errorlevel = 0;
+        errorlevel = 0;
         break;
       case SunmiQrcodeLevel.LEVEL_M:
-        _errorlevel = 1;
+        errorlevel = 1;
 
         break;
       case SunmiQrcodeLevel.LEVEL_Q:
-        _errorlevel = 2;
+        errorlevel = 2;
         break;
       case SunmiQrcodeLevel.LEVEL_H:
-        _errorlevel = 3;
+        errorlevel = 3;
         break;
     }
     Map<String, dynamic> arguments = <String, dynamic>{
       "data": data,
       'modulesize': size,
-      'errorlevel': _errorlevel
+      'errorlevel': errorlevel,
     };
     await _channel.invokeMethod("PRINT_QRCODE", arguments);
   }
@@ -208,64 +210,65 @@ class SunmiPrinter {
   ///*printBarCode*
   ///
   ///With this method you can print a barcode with any type discribed below or in the enum section
-  static Future<void> printBarCode(String data,
-      {SunmiBarcodeType barcodeType = SunmiBarcodeType.CODE128,
-      int height = 162,
-      int width = 2,
-      SunmiBarcodeTextPos textPosition =
-          SunmiBarcodeTextPos.TEXT_ABOVE}) async {
-    int _codeType = 8;
-    int _textPosition = 8;
+  static Future<void> printBarCode(
+    String data, {
+    SunmiBarcodeType barcodeType = SunmiBarcodeType.CODE128,
+    int height = 162,
+    int width = 2,
+    SunmiBarcodeTextPos textPosition = SunmiBarcodeTextPos.TEXT_ABOVE,
+  }) async {
+    int codeType = 8;
+    int textPosition0 = 8;
     switch (barcodeType) {
       case SunmiBarcodeType.UPCA:
-        _codeType = 0;
+        codeType = 0;
         break;
       case SunmiBarcodeType.UPCE:
-        _codeType = 1;
+        codeType = 1;
         break;
       case SunmiBarcodeType.JAN13:
-        _codeType = 2;
+        codeType = 2;
         break;
       case SunmiBarcodeType.JAN8:
-        _codeType = 3;
+        codeType = 3;
         break;
       case SunmiBarcodeType.CODE39:
-        _codeType = 4;
+        codeType = 4;
         break;
       case SunmiBarcodeType.ITF:
-        _codeType = 5;
+        codeType = 5;
         break;
       case SunmiBarcodeType.CODABAR:
-        _codeType = 6;
+        codeType = 6;
         break;
       case SunmiBarcodeType.CODE93:
-        _codeType = 7;
+        codeType = 7;
         break;
       case SunmiBarcodeType.CODE128:
-        _codeType = 8;
+        codeType = 8;
         break;
     }
 
     switch (textPosition) {
       case SunmiBarcodeTextPos.NO_TEXT:
-        _textPosition = 0;
+        textPosition0 = 0;
         break;
       case SunmiBarcodeTextPos.TEXT_ABOVE:
-        _textPosition = 1;
+        textPosition0 = 1;
         break;
       case SunmiBarcodeTextPos.TEXT_UNDER:
-        _textPosition = 2;
+        textPosition0 = 2;
         break;
       case SunmiBarcodeTextPos.BOTH:
-        _textPosition = 3;
+        textPosition0 = 3;
         break;
     }
     Map<String, dynamic> arguments = <String, dynamic>{
       "data": data,
-      'barcodeType': _codeType,
-      'textPosition': _textPosition,
+      'barcodeType': codeType,
+      'textPosition': textPosition0,
       'width': width,
-      'height': height
+      'height': height,
     };
     await _channel.invokeMethod("PRINT_BARCODE", arguments);
   }
@@ -281,10 +284,7 @@ class SunmiPrinter {
   ///*line*
   ///
   ///With this method you can draw a line to divide sections.
-  static Future<void> line({
-    String ch = '-',
-    int len = 31,
-  }) async {
+  static Future<void> line({String ch = '-', int len = 31}) async {
     resetFontSize();
     await printText(List.filled(len, ch[0]).join());
   }
@@ -324,8 +324,8 @@ class SunmiPrinter {
       case SunmiPrintAlign.RIGHT:
         value = 2;
         break;
-      default:
-        value = 0;
+      // default:
+      //   value = 0;
     }
     Map<String, dynamic> arguments = <String, dynamic>{"alignment": value};
     await _channel.invokeMethod("SET_ALIGNMENT", arguments);
@@ -398,26 +398,26 @@ class SunmiPrinter {
   ///This method will change the fontsize , between extra small and extra large.
   ///You can see the sizes below or in the enum file.
 
-  static Future<void> setFontSize(SunmiFontSize _size) async {
-    int _fontSize = 24;
-    switch (_size) {
+  static Future<void> setFontSize(SunmiFontSize size) async {
+    int fontSize = 24;
+    switch (size) {
       case SunmiFontSize.XS:
-        _fontSize = 14;
+        fontSize = 14;
         break;
       case SunmiFontSize.SM:
-        _fontSize = 18;
+        fontSize = 18;
         break;
       case SunmiFontSize.MD:
-        _fontSize = 24;
+        fontSize = 24;
         break;
       case SunmiFontSize.LG:
-        _fontSize = 36;
+        fontSize = 36;
         break;
       case SunmiFontSize.XL:
-        _fontSize = 42;
+        fontSize = 42;
         break;
     }
-    Map<String, dynamic> arguments = <String, dynamic>{"size": _fontSize};
+    Map<String, dynamic> arguments = <String, dynamic>{"size": fontSize};
 
     await _channel.invokeMethod("FONT_SIZE", arguments);
   }
@@ -425,8 +425,8 @@ class SunmiPrinter {
   ///*setCustomFontSize*
   ///
   ///This method will allow you to put any font size integer and try the best fit for you
-  static Future<void> setCustomFontSize(int _size) async {
-    Map<String, dynamic> arguments = <String, dynamic>{"size": _size};
+  static Future<void> setCustomFontSize(int size) async {
+    Map<String, dynamic> arguments = <String, dynamic>{"size": size};
     await _channel.invokeMethod("FONT_SIZE", arguments);
   }
 
@@ -442,8 +442,8 @@ class SunmiPrinter {
   ///
   /// Get the paper size , because they can change the printers between 56 and 80mm
   static Future<int> paperSize() async {
-    int? _size = await _channel.invokeMethod("PAPER_SIZE");
-    return _paperize[_size ?? 0];
+    int? size = await _channel.invokeMethod("PAPER_SIZE");
+    return _paperize[size ?? 0];
   }
 
   ///*serialNumber*
@@ -495,8 +495,10 @@ class SunmiPrinter {
 
   /// Display 2 lines string on LCD
   static Future<void> lcdDoubleString(String topText, String bottomText) async {
-    return await _channel.invokeMethod(
-        "LCD_DOUBLE_STRING", {"topText": topText, "bottomText": bottomText});
+    return await _channel.invokeMethod("LCD_DOUBLE_STRING", {
+      "topText": topText,
+      "bottomText": bottomText,
+    });
   }
 
   /// Send a single-line text in a customized size.
@@ -504,17 +506,27 @@ class SunmiPrinter {
   /// e.g. size:16, fill:false ... Half size char ( Like lcdDoubleString() )
   ///      size:32, fill:false ... Full size char ( Like lcdString() )
   ///      size:64, fill:true ... Width 64 pixel huge character.
-  static Future<void> lcdFillString(String text,
-      {int size = 32, bool fill = false}) async {
-    return await _channel.invokeMethod(
-        "LCD_FILL_STRING", {"string": text, "size": size, "fill": fill});
+  static Future<void> lcdFillString(
+    String text, {
+    int size = 32,
+    bool fill = false,
+  }) async {
+    return await _channel.invokeMethod("LCD_FILL_STRING", {
+      "string": text,
+      "size": size,
+      "fill": fill,
+    });
   }
 
   /// Display variable height multiline string.
   /// aligns: The weight of the solid content of each line. Like flex.
   static Future<void> lcdMultiString(
-      List<String> texts, List<int> aligns) async {
-    return await _channel
-        .invokeMethod("LCD_MULTI_STRING", {"text": texts, "align": aligns});
+    List<String> texts,
+    List<int> aligns,
+  ) async {
+    return await _channel.invokeMethod("LCD_MULTI_STRING", {
+      "text": texts,
+      "align": aligns,
+    });
   }
 }

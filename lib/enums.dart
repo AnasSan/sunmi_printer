@@ -1,5 +1,5 @@
 // ignore_for_file: constant_identifier_names
-library enums;
+// library enums;
 
 ///*PrinterStatus*
 ///
@@ -25,31 +25,17 @@ enum PrinterStatus {
 ///*PrinterMode*
 ///
 ///Enum to set printer mode
-enum PrinterMode {
-  UNKNOWN,
-  NORMAL_MODE,
-  BLACK_LABEL_MODE,
-  LABEL_MODE,
-}
+enum PrinterMode { UNKNOWN, NORMAL_MODE, BLACK_LABEL_MODE, LABEL_MODE }
 
 ///*SunmiPrintAlign*
 ///
 ///Enum to set printer aligntment
-enum SunmiPrintAlign {
-  LEFT,
-  CENTER,
-  RIGHT,
-}
+enum SunmiPrintAlign { LEFT, CENTER, RIGHT }
 
 ///*SunmiQrcodeLevel*
 ///
 //Enum to set a QRcode Level (Low to High)
-enum SunmiQrcodeLevel {
-  LEVEL_L,
-  LEVEL_M,
-  LEVEL_Q,
-  LEVEL_H,
-}
+enum SunmiQrcodeLevel { LEVEL_L, LEVEL_M, LEVEL_Q, LEVEL_H }
 
 ///*SunmiBarcodeType*
 ///
@@ -69,19 +55,8 @@ enum SunmiBarcodeType {
 ///*SunmiBarcodeTextPos*
 ///
 ///Enum to set how the thex will be printed in barcode
-enum SunmiBarcodeTextPos {
-  NO_TEXT,
-  TEXT_ABOVE,
-  TEXT_UNDER,
-  BOTH,
-}
+enum SunmiBarcodeTextPos { NO_TEXT, TEXT_ABOVE, TEXT_UNDER, BOTH }
 
 ///*SunmiFontSize*
 ///Enum to set font in the printer
-enum SunmiFontSize {
-  XS,
-  SM,
-  MD,
-  LG,
-  XL,
-}
+enum SunmiFontSize { XS, SM, MD, LG, XL }

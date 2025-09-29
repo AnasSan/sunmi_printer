@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
@@ -9,36 +8,37 @@ import 'main.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeRight]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeRight,
+  ]);
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Sunmi LCD',
-        theme: ThemeData(
-          primaryColor: Colors.black,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: const Home());
+      title: 'Sunmi LCD',
+      theme: ThemeData(primaryColor: Colors.black),
+      debugShowCheckedModeBanner: false,
+      home: const Home(),
+    );
   }
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -64,16 +64,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sunmi LCD Example'),
-      ),
+      appBar: AppBar(title: const Text('Sunmi LCD Example')),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            child: Text("LCD binded: " + printBinded.toString()),
+            padding: const EdgeInsets.only(top: 10),
+            child: Text("LCD binded: $printBinded"),
           ),
           const Divider(),
           Expanded(
@@ -129,8 +125,9 @@ class _HomeState extends State<Home> {
                   context,
                   labels: ['LCD Bitmap', '128x40'],
                   onPressed: () async {
-                    Uint8List byte =
-                        await readFileBytes('assets/images/128x40.png');
+                    Uint8List byte = await readFileBytes(
+                      'assets/images/128x40.png',
+                    );
                     await SunmiPrinter.lcdImage(byte);
                   },
                 ),
@@ -138,8 +135,9 @@ class _HomeState extends State<Home> {
                   context,
                   labels: ['LCD Bitmap', '16x16'],
                   onPressed: () async {
-                    Uint8List byte =
-                        await readFileBytes('assets/images/16x16.png');
+                    Uint8List byte = await readFileBytes(
+                      'assets/images/16x16.png',
+                    );
                     await SunmiPrinter.lcdImage(byte);
                   },
                 ),
@@ -147,8 +145,9 @@ class _HomeState extends State<Home> {
                   context,
                   labels: ['LCD Bitmap', 'dash.jpeg', 'But no fit.'],
                   onPressed: () async {
-                    Uint8List byte =
-                        await readFileBytes('assets/images/dash.jpeg');
+                    Uint8List byte = await readFileBytes(
+                      'assets/images/dash.jpeg',
+                    );
                     await SunmiPrinter.lcdImage(byte);
                   },
                 ),
@@ -156,52 +155,57 @@ class _HomeState extends State<Home> {
                   context,
                   labels: ['Fill String', '32px, fill=false'],
                   onPressed: () async {
-                    await SunmiPrinter.lcdFillString('Size32',
-                        size: 32, fill: false);
+                    await SunmiPrinter.lcdFillString(
+                      'Size32',
+                      size: 32,
+                      fill: false,
+                    );
                   },
                 ),
                 _buildButton(
                   context,
                   labels: ['Fill String', '16px, fill=true'],
                   onPressed: () async {
-                    await SunmiPrinter.lcdFillString('abcDEFgj0123\$&=+',
-                        size: 16, fill: true);
+                    await SunmiPrinter.lcdFillString(
+                      'abcDEFgj0123\$&=+',
+                      size: 16,
+                      fill: true,
+                    );
                   },
                 ),
                 _buildButton(
                   context,
                   labels: ['Fill String', '64px, fill=true'],
                   onPressed: () async {
-                    await SunmiPrinter.lcdFillString('64px',
-                        size: 64, fill: true);
+                    await SunmiPrinter.lcdFillString(
+                      '64px',
+                      size: 64,
+                      fill: true,
+                    );
                   },
                 ),
                 _buildButton(
                   context,
                   labels: ['Multi String', '2 flex lines.'],
                   onPressed: () async {
-                    await SunmiPrinter.lcdMultiString([
-                      'Welcome to flutter.',
-                      'Align 2.',
-                    ], [
-                      1,
-                      2,
-                    ]);
+                    await SunmiPrinter.lcdMultiString(
+                      ['Welcome to flutter.', 'Align 2.'],
+                      [1, 2],
+                    );
                   },
                 ),
                 _buildButton(
                   context,
                   labels: ['Multi String', '3 flex lines.'],
                   onPressed: () async {
-                    await SunmiPrinter.lcdMultiString([
-                      'This line has align 1.',
-                      'Align 2.',
-                      'This line has align 1.',
-                    ], [
-                      1,
-                      2,
-                      1
-                    ]);
+                    await SunmiPrinter.lcdMultiString(
+                      [
+                        'This line has align 1.',
+                        'Align 2.',
+                        'This line has align 1.',
+                      ],
+                      [1, 2, 1],
+                    );
                   },
                 ),
               ],
@@ -212,14 +216,17 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildButton(BuildContext context,
-      {required List<String> labels, required VoidCallback onPressed}) {
+  Widget _buildButton(
+    BuildContext context, {
+    required List<String> labels,
+    required VoidCallback onPressed,
+  }) {
     return ElevatedButton(
+      onPressed: onPressed,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: labels.map((l) => Text(l)).toList(),
       ),
-      onPressed: onPressed,
     );
   }
 }

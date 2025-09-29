@@ -30,13 +30,9 @@ class ColumnMaker {
       case SunmiPrintAlign.RIGHT:
         value = 2;
         break;
-      default:
-        value = 0;
+      // default:
+      //   value = 0;
     }
-    return {
-      "text": text,
-      "width": width.toString(),
-      "align": value.toString(),
-    };
+    return {"text": text, "width": width.toString(), "align": value.toString()};
   }
 }
