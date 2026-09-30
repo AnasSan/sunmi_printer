@@ -6,8 +6,8 @@ version: 2.1.01
 homepage: https://github.com/brasizza/sunmi_printer/
 
 environment:
-  sdk: '>=3.12.2 <4.0.0'
-  flutter: '>=3.44.2'
+  sdk: '>=3.13.4 <4.0.0'
+  flutter: '>=3.47.5'
 
 dependencies:
   flutter:
